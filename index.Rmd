@@ -121,6 +121,13 @@ DensityTS=DensityTS+geom_vline(aes(xintercept=median(TSRatio)),
             color="red", linetype="dashed", size=1)
 DensityTS
 ```
+
+
+
+
+
+
+
 Creating Box Plot for Level of Education Provided in schools
 
 ```{r,eval=TRUE, echo=FALSE}
