@@ -1,0 +1,145 @@
+<br> 
+<center><img src="http://i.imgur.com/sSaOozN.png" width="500"></center>
+
+## Visualization_Exercise 2
+
+### By MPA Candidate  Long Zong
+
+This is the data that is being used
+
+```{r}
+link1='https://github.com/EvansDataScience/VisualAnalytics_2_tabularData/raw/master/data/eduwa.rda'
+```
+
+
+
+Making Histogram of Schools Providing Free Lunch
+
+```{r,eval=TRUE, echo=FALSE}
+load(file=url(link1))
+eduwa1=eduwa[complete.cases(eduwa$Free.Lunch),]
+dataHistFL=hist(eduwa1$Free.Lunch)
+```
+```{r,eval=TRUE, echo=FALSE}
+library(ggplot2)
+```
+
+Using GGPlot to creat Histogram on Free Lunch
+```{r,eval=TRUE, echo=FALSE}
+baseFL= ggplot(eduwa1,aes(x = Free.Lunch))  
+h1= baseFL + geom_histogram()
+h1 
+```
+
+
+
+
+
+Compared with the plot made by basic R, there are some difference. Adjusting the GGPlot, and putting less ink in it.
+
+
+
+
+
+
+```{r,eval=TRUE, echo=FALSE}
+TitleText='Number of Free Lunch Being Provided by School'
+
+base1= ggplot(eduwa1,aes(x = Free.Lunch))  
+h1= base1 + geom_histogram(binwidth = 100,boundary=0) #changing width
+h1= h1 + stat_bin(binwidth = 100, aes(label=..count..), 
+                  geom = "text",boundary = 0,vjust=-0.2)
+
+
+h2=h1+labs(title=TitleText,
+                     x ='Numbre of Free Lunch', 
+                     y = 'Freequency',
+            caption = 'U.S Department of Education')
+h3 = h2 + theme(panel.background = element_rect(fill = "white",
+                                                    colour = "grey50"),
+                    plot.caption = element_text(hjust = 0), # default was 1
+                    plot.title = element_text(hjust = 0.5))
+h3
+```
+
+
+
+
+
+
+
+
+
+
+
+
+Using GGPlot to plot the Teach/Student Ratio in each county
+
+
+
+
+
+
+
+```{r,eval=TRUE, echo=FALSE}
+TSRatio=tapply(eduwa$Student.Teacher.Ratio, eduwa$County, mean,na.rm=T)
+DF_TSRatio=as.data.frame(TSRatio)
+base5=ggplot(DF_TSRatio,aes(x = TSRatio))  
+
+TITLE='CountyTeacher/Student Ratio within WA State'
+
+hTS= base5 + geom_histogram(binwidth = 2,boundary=10) #changing width
+hTS1= hTS + stat_bin(binwidth = 2, aes(label=..count..), 
+                  geom = "text",boundary = 0,vjust=-0.3)
+hTS2=hTS1+theme(panel.background = element_rect(fill = "white",
+                                                    colour = "grey50"),
+                    plot.caption = element_text(hjust = 0), # default was 1
+                    plot.title = element_text(hjust = 0.5))
+
+hTS2=hTS2 + labs(title=TITLE,
+                     x ='Teacher/Student Ratio', 
+                     y = 'Frequency',
+                     caption = 'U.S Department of Education')
+hTS2
+```
+
+
+Creating Density Plot on Teach/Student Ratio in each county
+
+
+```{r,eval=TRUE, echo=FALSE}
+DensityTS=base5+geom_density()
+DensityTS
+```
+
+Modifying the Density Plot, adding Median Reference Line (Red) and Average Reference Line (Blue)
+
+```{r,eval=TRUE, echo=FALSE}
+DensityTS=DensityTS+geom_vline(aes(xintercept=mean(TSRatio)),
+            color="blue", linetype="dashed", size=1)
+DensityTS=DensityTS+geom_vline(aes(xintercept=median(TSRatio)),
+            color="red", linetype="dashed", size=1)
+DensityTS
+```
+Creating Box Plot for Level of Education Provided in schools
+
+```{r,eval=TRUE, echo=FALSE}
+TITLE2='School Level of Education Provided'
+box1 = ggplot(eduwa, aes(y=as.numeric(High.Grade))) 
+box1=box1 + labs(Y = NULL, 
+                 X = NULL)
+box1 = box1 + geom_boxplot() + coord_flip() # to show it horizontally
+
+ordLabels= levels(eduwa$High.Grade)
+
+box2 = box1 + scale_y_continuous(labels=ordLabels,breaks=1:15)
+box3=box2 + labs(title=TITLE2,
+                     Y = NULL, 
+                     X = NULL,
+                     caption = 'U.S Department of Education')
+box3=box3+scale_x_discrete(breaks = NULL) + xlab(NULL)
+box3
+```
+
+
+
