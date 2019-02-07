@@ -128,7 +128,17 @@ DensityTS
 
 
 
-Creating Box Plot for Level of Education Provided in schools
+Creating Box Plot for Level of Education Provided in schools in the WA State
+
+
+
+
+
+
+
+
+
+
 
 ```{r,eval=TRUE, echo=FALSE}
 TITLE2='School Level of Education Provided'
